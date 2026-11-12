@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        PYTHON = 'C:\\Users\\Dell\\AppData\\Local\\Programs\\Python\\Python314\\python.exe'
+    }
 
     parameters {
         choice(name: 'ENVIRONMENT', choices: ['chemical_plant', 'boiler_room'], description: 'Select Industrial Environment')
@@ -8,7 +11,7 @@ pipeline {
     stages {
         stage('Setup') {
             steps {
-                bat 'py -m venv .venv'
+                bat '"%PYTHON%" -m venv .venv'
                 bat '.venv\\Scripts\\python -m pip install -r requirements.txt'
             }
         }
