@@ -6,17 +6,22 @@ pipeline {
     }
 
     stages {
+        stage('Setup') {
+            steps {
+                bat 'py -m venv .venv'
+                bat '.venv\\Scripts\\python -m pip install -r requirements.txt'
+            }
+        }
         stage('Run Parameterized Tests') {
             steps {
-                // Environment parameter-a pass panni test run panrathu
-                bat ".venv\\Scripts\\pytest -v --html=reports/report_${params.ENVIRONMENT}.html --self-contained-html"
+                bat ".venv\\Scripts\\python -m pytest -v -k ${params.ENVIRONMENT} --html=reports/report_${params.ENVIRONMENT}.html --self-contained-html"
             }
         }
     }
-    
+
     post {
         always {
-            publishHTML([
+            publishHTML(target: [
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
